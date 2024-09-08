@@ -13,7 +13,31 @@ object Listen {
     var userSelectedFile: File? = null
 
     fun registerCreateItem() {
-
+        createFile.addActionListener {
+            tabPane.addTab(null, EditorScrollPane(EditorArea()))
+            val index = tabPane.selectedIndex
+            if (index != -1) {
+                tabPane.setTabComponentAt(bufferList.size, JPanel().apply {
+                    layout = BorderLayout()
+                    add(JLabel(defaultTitle).apply {
+                        font = tabFont
+                    }, BorderLayout.CENTER)
+                    add(JButton("x").apply {
+                        isFocusPainted = false
+                        isContentAreaFilled = false
+                        // delete buffer
+                        addActionListener {
+                            val index = tabPane.selectedIndex
+                            if (index >= 0) {
+                                tabPane.removeTabAt(index)
+                                bufferList.removeAt(index)//更新维护list
+                            }
+                        }
+                    }, BorderLayout.EAST)
+                })
+                bufferList.add(EditorArea())
+            }
+        }
     }
 
     fun registerOpenItem() =
@@ -23,19 +47,19 @@ object Listen {
                 val result = showOpenDialog(null)
                 // if user approve open file
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    if (selectedFile == userSelectedFile) {
-                        labelPopup("File is already open!")
-                        return@addActionListener
-                    }
                     userSelectedFile = selectedFile
                     val currentTextArea = EditorArea()
-
-                    tabPane.addTab(null, EditorScrollPane(currentTextArea))
-                    println(userSelectedFile!!.name)
-                    bufferList.add(currentTextArea)
-
                     // read file and write into buffer
                     userSelectedFile?.bufferedReader().use {
+                        for (i in 0..<tabPane.tabCount) {
+                            if (tabPane.getTitleAt(i) == selectedFile.name) {
+                                labelPopup("File is already open!")
+                                return@addActionListener
+                            }
+                        }
+                        tabPane.addTab(null, EditorScrollPane(currentTextArea))
+                        println(userSelectedFile!!.name)
+                        bufferList.add(currentTextArea)
                         val lastIndex = bufferList.size - 1
                         tabPane.setTabComponentAt(lastIndex, JPanel().apply {
                             layout = BorderLayout()
@@ -72,29 +96,29 @@ object Listen {
         } else println("save cancel")
     }
 
-    fun registerSaveAsItem() {
-        saveAs.addActionListener {
-            JFileChooser().apply {
-                var file: File
-                selectedFile = userSelectedFile
-                val result = showSaveDialog(null)
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    file = this.selectedFile
-                    if (file.exists()) {
-                        val overwrite = JOptionPane.showConfirmDialog(
-                            null,
-                            "File is already exists, Do you want to cover it?",
-                            "File exists",
-                            JOptionPane.YES_NO_OPTION
-                        )
-                        if (overwrite != JOptionPane.YES_OPTION) result
-                    }
-                    file.bufferedWriter().use {
-                        it.append(displayText.text)
-                    }
-                    JOptionPane.showMessageDialog(null, "FIle is saved at ${file.absolutePath}")
-                }
-            }
-        }
-    }
+//    fun registerSaveAsItem() {
+//        saveAs.addActionListener {
+//            JFileChooser().apply {
+//                var file: File
+//                selectedFile = userSelectedFile
+//                val result = showSaveDialog(null)
+//                if (result == JFileChooser.APPROVE_OPTION) {
+//                    file = this.selectedFile
+//                    if (file.exists()) {
+//                        val overwrite = JOptionPane.showConfirmDialog(
+//                            null,
+//                            "File is already exists, Do you want to cover it?",
+//                            "File exists",
+//                            JOptionPane.YES_NO_OPTION
+//                        )
+//                        if (overwrite != JOptionPane.YES_OPTION) result
+//                    }
+//                    file.bufferedWriter().use {
+//                        it.append(displayText.text)
+//                    }
+//                    JOptionPane.showMessageDialog(null, "FIle is saved at ${file.absolutePath}")
+//                }
+//            }
+//        }
+//    }
 }

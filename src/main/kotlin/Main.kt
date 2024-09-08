@@ -13,11 +13,9 @@ import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
 
-
-val displayText = EditorArea()
-val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
+val bufferList = mutableListOf(EditorArea(defaultTitle)) // 维护tabpane内部editorarea
 val displayTextPane = EditorScrollPane(bufferList[0])
-val tabPane: JTabbedPane = JTabbedPane(JTabbedPane.TOP).apply {
+val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
     setTabComponentAt(0, JPanel().apply {
         layout = BorderLayout()
@@ -32,26 +30,7 @@ val tabPane: JTabbedPane = JTabbedPane(JTabbedPane.TOP).apply {
 }
 
 // ------------------------
-val createFile = JMenuItem("Create File").apply {
-    addActionListener {
-        tabPane.addTab(null, EditorScrollPane(EditorArea()))
-        val index = tabPane.selectedIndex
-        if (index != -1) {
-
-            tabPane.setTabComponentAt(bufferList.size, JPanel().apply {
-                layout = BorderLayout()
-                add(JLabel(defaultTitle).apply {
-                    font = tabFont
-                }, BorderLayout.CENTER)
-                add(JButton("x").apply {
-                    isFocusPainted = false
-                    isContentAreaFilled = false
-                }, BorderLayout.EAST)
-            })
-            bufferList.add(EditorArea())
-        }
-    }
-}
+val createFile = JMenuItem("Create File")
 val open = JMenuItem("Open")
 val save = JMenuItem("Save")
 val saveAs = JMenuItem("Save As")
@@ -63,6 +42,7 @@ val exit = JMenuItem("Exit").apply {
         exitProcess(0)
     }
 }
+
 val menu = JMenu(">_<").apply {
     add(createFile)
     add(open)
@@ -76,6 +56,7 @@ val menu = JMenu(">_<").apply {
     addSeparator()
     add(exit)
 }
+
 val displayMenuBar = JMenuBar().apply {
     add(menu)
 }
@@ -85,6 +66,7 @@ val displayFrame = JFrame().apply {
     contentPane = tabPane
 
     // register event listener
+    Listen.registerCreateItem()
     Listen.registerOpenItem()
     Listen.registerSaveItem()
 
@@ -93,7 +75,6 @@ val displayFrame = JFrame().apply {
     defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     isVisible = true
 }
-
 
 class Main {
     companion object {

@@ -3,7 +3,8 @@ package me.cdh
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 
-class EditorArea : JTextArea() {
+class EditorArea(textArea: String) : JTextArea("") {
+    constructor():this(""){}
     init {
         lineWrap = true
         tabSize = 4

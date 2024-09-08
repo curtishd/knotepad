@@ -17,7 +17,6 @@ fun labelPopup(message: String) {
     val windowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().maximumWindowBounds
 
     val frame = JFrame().apply {
-//        setSize(100, 40)
         isUndecorated = true
         isAlwaysOnTop = true
         isResizable = false
@@ -31,7 +30,6 @@ fun labelPopup(message: String) {
         add(panel)
         isVisible = true
         setLocation(x, y)
-//        setLocationRelativeTo(null)
     }
     val task = object : TimerTask() {
         override fun run() {
