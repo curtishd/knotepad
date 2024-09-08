@@ -12,6 +12,10 @@ import javax.swing.JPanel
 object Listen {
     var userSelectedFile: File? = null
 
+    fun registerCreateItem() {
+
+    }
+
     fun registerOpenItem() =
         open.addActionListener {
             JFileChooser().apply {
@@ -30,9 +34,10 @@ object Listen {
                     println(userSelectedFile!!.name)
                     bufferList.add(currentTextArea)
 
+                    // read file and write into buffer
                     userSelectedFile?.bufferedReader().use {
-                        val lastIndex = tabPane.selectedIndex//-1
-                        tabPane.setTabComponentAt(lastIndex + 1, JPanel().apply {
+                        val lastIndex = bufferList.size - 1
+                        tabPane.setTabComponentAt(lastIndex, JPanel().apply {
                             layout = BorderLayout()
                             add(JLabel(userSelectedFile!!.name).apply {
                                 font = tabFont
@@ -42,20 +47,18 @@ object Listen {
                                 isContentAreaFilled = false
                             }, BorderLayout.EAST)
                         })
-                        if (lastIndex != -1)
-                            it?.readLines()?.forEach {
-                                currentTextArea.append("$it\n")
-                                // set the current buffer title as same as the file which user selected
-                                tabPane.selectedIndex = lastIndex + 1
-                                tabPane.setTitleAt(lastIndex + 1, userSelectedFile?.name)
-                            }
-                        else println("open cancel")
+                        it?.readLines()?.forEach {
+                            currentTextArea.append("$it\n")
+                            // set the current buffer title as same as the file which user selected
+                            tabPane.selectedIndex = lastIndex
+                            tabPane.setTitleAt(lastIndex, userSelectedFile?.name)
+                        }
                     }
-                }
+                } else println("open cancel")
             }
         }
 
-
+    //TODO
     fun registerSaveItem() {
         val index = tabPane.selectedIndex
         if (index != -1) {

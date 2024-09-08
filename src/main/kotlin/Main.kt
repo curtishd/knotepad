@@ -15,7 +15,7 @@ import kotlin.system.exitProcess
 
 
 val displayText = EditorArea()
-val bufferList = mutableListOf(EditorArea())
+val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane: JTabbedPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
@@ -33,10 +33,23 @@ val tabPane: JTabbedPane = JTabbedPane(JTabbedPane.TOP).apply {
 
 // ------------------------
 val createFile = JMenuItem("Create File").apply {
-    val addOne = EditorArea()
     addActionListener {
-        tabPane.addTab(defaultTitle, EditorScrollPane(addOne))
-        bufferList.add(addOne)
+        tabPane.addTab(null, EditorScrollPane(EditorArea()))
+        val index = tabPane.selectedIndex
+        if (index != -1) {
+
+            tabPane.setTabComponentAt(bufferList.size, JPanel().apply {
+                layout = BorderLayout()
+                add(JLabel(defaultTitle).apply {
+                    font = tabFont
+                }, BorderLayout.CENTER)
+                add(JButton("x").apply {
+                    isFocusPainted = false
+                    isContentAreaFilled = false
+                }, BorderLayout.EAST)
+            })
+            bufferList.add(EditorArea())
+        }
     }
 }
 val open = JMenuItem("Open")

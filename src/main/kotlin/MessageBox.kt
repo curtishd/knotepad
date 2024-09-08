@@ -1,6 +1,7 @@
 package me.cdh
 
 import java.awt.BorderLayout
+import java.awt.GraphicsEnvironment
 import java.util.Timer
 import java.util.TimerTask
 import javax.swing.JFrame
@@ -13,6 +14,8 @@ import javax.swing.border.EtchedBorder
 fun labelPopup(message: String) {
     val messageLabel = JLabel(message)
     messageLabel.font = messageBoxFont
+    val windowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().maximumWindowBounds
+
     val frame = JFrame().apply {
 //        setSize(100, 40)
         isUndecorated = true
@@ -22,11 +25,13 @@ fun labelPopup(message: String) {
         val panel = JPanel()
         panel.border = EtchedBorder()
         panel.add(messageLabel, BorderLayout.CENTER)
-
+        val x = 2 * windowBounds.width / 5
+        val y = 3 * windowBounds.height / 4
         setSize(300, 40)
         add(panel)
         isVisible = true
-        setLocationRelativeTo(null)
+        setLocation(x, y)
+//        setLocationRelativeTo(null)
     }
     val task = object : TimerTask() {
         override fun run() {
