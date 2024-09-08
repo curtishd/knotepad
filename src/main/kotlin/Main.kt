@@ -2,6 +2,8 @@ package me.cdh
 
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.BorderLayout
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.JLabel
@@ -11,9 +13,8 @@ import javax.swing.JMenuItem
 import javax.swing.JPanel
 import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
-import kotlin.system.exitProcess
 
-val bufferList = mutableListOf(EditorArea(defaultTitle)) // 维护tabpane内部editorarea
+val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
@@ -39,7 +40,7 @@ val closePage = JMenuItem("Close Current Page")
 val settings = JMenuItem("Settings")
 val exit = JMenuItem("Exit").apply {
     addActionListener {
-        exitProcess(0)
+        exitOrNot()
     }
 }
 
@@ -72,8 +73,13 @@ val displayFrame = JFrame().apply {
 
     setSize(1000, 800)
     setLocationRelativeTo(null)
-    defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+    defaultCloseOperation = JFrame.DO_NOTHING_ON_CLOSE
     isVisible = true
+    addWindowListener(object : WindowAdapter() {
+        override fun windowClosing(e: WindowEvent?) {
+            exitOrNot()
+        }
+    })
 }
 
 class Main {

@@ -69,6 +69,13 @@ object Listen {
                             add(JButton("x").apply {
                                 isFocusPainted = false
                                 isContentAreaFilled = false
+                                addActionListener {
+                                    val index = tabPane.selectedIndex
+                                    if (index >= 0) {
+                                        tabPane.removeTabAt(index)
+                                        bufferList.removeAt(index)//更新维护list
+                                    }
+                                }
                             }, BorderLayout.EAST)
                         })
                         it?.readLines()?.forEach {

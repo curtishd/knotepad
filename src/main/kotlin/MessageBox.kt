@@ -6,8 +6,10 @@ import java.util.Timer
 import java.util.TimerTask
 import javax.swing.JFrame
 import javax.swing.JLabel
+import javax.swing.JOptionPane
 import javax.swing.JPanel
 import javax.swing.border.EtchedBorder
+import kotlin.system.exitProcess
 
 
 // popup save label after save event
@@ -37,4 +39,11 @@ fun labelPopup(message: String) {
         }
     }
     Timer().schedule(task, 2000L)
+}
+
+fun exitOrNot() {
+    val result = JOptionPane.showConfirmDialog(null, "Are you sure to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION)
+    if (result == JOptionPane.YES_OPTION) {
+        exitProcess(0)
+    }
 }
