@@ -1,28 +1,35 @@
 package me.cdh
 
 import com.formdev.flatlaf.FlatDarkLaf
-import java.awt.Font
+import java.awt.BorderLayout
+import javax.swing.JButton
 import javax.swing.JFrame
+import javax.swing.JLabel
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
+import javax.swing.JPanel
 import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
 
-// -----------------------
+
 val displayText = EditorArea()
 val bufferList = mutableListOf(EditorArea())
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane: JTabbedPane = JTabbedPane(JTabbedPane.TOP).apply {
-    font = Font("Arial", Font.ITALIC, 12)
     addTab(defaultTitle, displayTextPane)
+    setTabComponentAt(0, JPanel().apply {
+        layout = BorderLayout()
+        add(JLabel(defaultTitle).apply {
+            font = tabFont
+        }, BorderLayout.CENTER)
+        add(JButton("x").apply {
+            isFocusPainted = false
+            isContentAreaFilled = false
+        }, BorderLayout.EAST)
+    })
 }
-
-const val defaultTitle = "New File"
-
-//
-val contentFont = Font("Cascadia Mono", Font.PLAIN, 14)
 
 // ------------------------
 val createFile = JMenuItem("Create File").apply {
@@ -64,7 +71,7 @@ val displayFrame = JFrame().apply {
     jMenuBar = displayMenuBar
     contentPane = tabPane
 
-    // 注册监听
+    // register event listener
     Listen.registerOpenItem()
     Listen.registerSaveItem()
 
@@ -76,7 +83,6 @@ val displayFrame = JFrame().apply {
 
 
 class Main {
-
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {

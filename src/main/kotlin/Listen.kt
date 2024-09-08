@@ -1,48 +1,72 @@
 package me.cdh
 
+import java.awt.BorderLayout
 import java.io.File
+import javax.swing.JButton
 import javax.swing.JFileChooser
+import javax.swing.JLabel
 import javax.swing.JOptionPane
+import javax.swing.JPanel
 
+// register menu item.
 object Listen {
     var userSelectedFile: File? = null
+
     fun registerOpenItem() =
         open.addActionListener {
             JFileChooser().apply {
                 fileSelectionMode = JFileChooser.FILES_ONLY
-                showOpenDialog(null)
-                userSelectedFile = selectedFile
-                val currentTextArea = EditorArea()
+                val result = showOpenDialog(null)
+                // if user approve open file
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    if (selectedFile == userSelectedFile) {
+                        labelPopup("File is already open!")
+                        return@addActionListener
+                    }
+                    userSelectedFile = selectedFile
+                    val currentTextArea = EditorArea()
 
-                tabPane.addTab(userSelectedFile?.name, EditorScrollPane(currentTextArea))
-                bufferList.add(currentTextArea)
+                    tabPane.addTab(null, EditorScrollPane(currentTextArea))
+                    println(userSelectedFile!!.name)
+                    bufferList.add(currentTextArea)
 
-                userSelectedFile?.bufferedReader().use {
-                    val currentTabIndex = tabPane.selectedIndex//-1
-                    it?.readLines()?.forEach {
-                        currentTextArea.append("$it\n")
-                        // 设置当前buffer标题为用户打开的文件名
-                        tabPane.selectedIndex = currentTabIndex + 1
-                        tabPane.setTitleAt(currentTabIndex + 1, userSelectedFile?.name)
+                    userSelectedFile?.bufferedReader().use {
+                        val lastIndex = tabPane.selectedIndex//-1
+                        tabPane.setTabComponentAt(lastIndex + 1, JPanel().apply {
+                            layout = BorderLayout()
+                            add(JLabel(userSelectedFile!!.name).apply {
+                                font = tabFont
+                            }, BorderLayout.CENTER)
+                            add(JButton("x").apply {
+                                isFocusPainted = false
+                                isContentAreaFilled = false
+                            }, BorderLayout.EAST)
+                        })
+                        if (lastIndex != -1)
+                            it?.readLines()?.forEach {
+                                currentTextArea.append("$it\n")
+                                // set the current buffer title as same as the file which user selected
+                                tabPane.selectedIndex = lastIndex + 1
+                                tabPane.setTitleAt(lastIndex + 1, userSelectedFile?.name)
+                            }
+                        else println("open cancel")
                     }
                 }
             }
         }
 
-    /**
-     * 写出文件
-     */
+
     fun registerSaveItem() {
-//        val scrollPane = tabPane.selectedComponent as EditorScrollPane
-//        val textArea = scrollPane.getComponent(0) as EditorArea
         val index = tabPane.selectedIndex
-        val bufferContent = bufferList[index].text
-        save.addActionListener {
-            userSelectedFile?.bufferedWriter().use {
-                it?.write(bufferContent)
+        if (index != -1) {
+            val bufferContent = bufferList[index].text
+            save.addActionListener {
+                userSelectedFile?.bufferedWriter().use {
+                    it?.write(bufferContent)
+                }
+                labelPopup("Saved")
             }
-            savedLabelPopup()
-        }
+        } else println("save cancel")
     }
 
     fun registerSaveAsItem() {
