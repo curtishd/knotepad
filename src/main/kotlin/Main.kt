@@ -67,9 +67,9 @@ val displayFrame = JFrame().apply {
     contentPane = tabPane
 
     // register event listener
-    Listen.registerCreateItem()
-    Listen.registerOpenItem()
-    Listen.registerSaveItem()
+    Listener.registerCreateItem()
+    Listener.registerOpenItem()
+    Listener.registerSaveItem()
 
     setSize(1000, 800)
     setLocationRelativeTo(null)
