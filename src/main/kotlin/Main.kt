@@ -15,12 +15,14 @@ import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
 
 val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
+//默认展示空白文件
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
     setTabComponentAt(0, JPanel().apply {
         layout = BorderLayout()
         add(JLabel(defaultTitle).apply {
+            setSize(100,20)
             font = tabFont
         }, BorderLayout.CENTER)
         add(JButton("x").apply {
@@ -30,7 +32,7 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     })
 }
 
-// ------------------------
+// 菜单栏选项
 val createFile = JMenuItem("Create File")
 val open = JMenuItem("Open")
 val save = JMenuItem("Save")
@@ -44,6 +46,7 @@ val exit = JMenuItem("Exit").apply {
     }
 }
 
+// 菜单栏按钮
 val menu = JMenu(">_<").apply {
     add(createFile)
     add(open)
@@ -62,6 +65,7 @@ val displayMenuBar = JMenuBar().apply {
     add(menu)
 }
 
+// 基础框架
 val displayFrame = JFrame().apply {
     jMenuBar = displayMenuBar
     contentPane = tabPane

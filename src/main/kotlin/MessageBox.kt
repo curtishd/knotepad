@@ -12,7 +12,7 @@ import javax.swing.border.EtchedBorder
 import kotlin.system.exitProcess
 
 
-// popup save label after save event
+// 弹出保存标签当保存成功的时候
 fun labelPopup(message: String) {
     val messageLabel = JLabel(message)
     messageLabel.font = messageBoxFont
@@ -41,6 +41,7 @@ fun labelPopup(message: String) {
     Timer().schedule(task, 2000L)
 }
 
+// 确认退出
 fun exitOrNot() {
     val result = JOptionPane.showConfirmDialog(null, "Are you sure to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION)
     if (result == JOptionPane.YES_OPTION) {

@@ -12,8 +12,8 @@ object Listener {
     var userSelectedFile: File? = null
 
     fun registerCreateItem() {
-        val panel = deleteBtnInTab(defaultTitle)
         createFile.addActionListener {
+            val panel = registerDeleteBtnInTab(defaultTitle)
             tabPane.addTab(null, EditorScrollPane(EditorArea()))
             val index = tabPane.selectedIndex
             if (index != -1) {
@@ -27,9 +27,8 @@ object Listener {
         open.addActionListener {
             JFileChooser().apply {
                 fileSelectionMode = JFileChooser.FILES_ONLY
-                val result = showOpenDialog(null)
                 // if user approve open file
-                if (result == JFileChooser.APPROVE_OPTION) {
+                if (showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     userSelectedFile = selectedFile
                     val currentTextArea = EditorArea()
                     // read file and write into buffer
@@ -44,7 +43,7 @@ object Listener {
                         }
                         println(userSelectedFile!!.name) //debug
                         val lastIndex = bufferList.size - 1
-                        val panel = deleteBtnInTab(userSelectedFile!!.name)
+                        val panel = registerDeleteBtnInTab(userSelectedFile!!.name)
                         tabPane.setTabComponentAt(lastIndex, panel)
                         // set the current buffer title as same as the file which user selected
                         tabPane.selectedIndex = lastIndex
@@ -53,6 +52,7 @@ object Listener {
                         val curIndex = tabPane.selectedIndex
                         val content = it?.readText()
                         bufferList[curIndex].text = content
+                        // write content to gui buffer
                         it?.readLines()?.forEach {
                             currentTextArea.append("$it\n")
                         }
@@ -61,18 +61,20 @@ object Listener {
             }
         }
 
-    //TODO
     fun registerSaveItem() {
-        val index = tabPane.selectedIndex
-        if (index != -1) {
-            val bufferContent = bufferList[index].text
-            save.addActionListener {
-                userSelectedFile?.bufferedWriter().use {
-                    it?.write(bufferContent)
+        save.addActionListener {
+            //TODO 处理tab为newfile的情况
+            val index = tabPane.selectedIndex
+            if (index != -1) {
+                val bufferContent = bufferList[index].text
+//                println(index)
+                userSelectedFile!!.bufferedWriter().use {
+                    it.write(bufferContent)
                 }
+//                println(bufferContent)
                 labelPopup("Saved")
-            }
-        } else println("save cancel")
+            } else println("save cancel")
+        }
     }
 
     //    fun registerSaveAsItem() {
@@ -100,19 +102,19 @@ object Listener {
 //            }
 //        }
 //    }
-    fun deleteBtnInTab(label: String): JPanel {
+    private fun registerDeleteBtnInTab(label: String): JPanel {
         val btn = JButton("x").apply {
             isFocusPainted = false
             isContentAreaFilled = false
         }
         val panel = JPanel().apply {
+            setSize(100, 20)
             layout = BorderLayout()
             add(JLabel(label).apply {
                 font = tabFont
             }, BorderLayout.CENTER)
             add(btn, BorderLayout.EAST)
         }
-
         with(btn) {
             addActionListener {
                 val index = tabPane.indexOfTabComponent(panel)
