@@ -11,7 +11,6 @@ import javax.swing.JPanel
 import javax.swing.border.EtchedBorder
 import kotlin.system.exitProcess
 
-
 // 弹出保存标签当保存成功的时候
 fun labelPopup(message: String) {
     val messageLabel = JLabel(message)

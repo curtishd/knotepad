@@ -1,6 +1,6 @@
 package me.cdh
 
-import com.formdev.flatlaf.FlatDarkLaf
+import com.formdev.flatlaf.themes.FlatMacDarkLaf
 import java.awt.BorderLayout
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -15,6 +15,7 @@ import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
 
 val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
+
 //默认展示空白文件
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
@@ -22,7 +23,7 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     setTabComponentAt(0, JPanel().apply {
         layout = BorderLayout()
         add(JLabel(defaultTitle).apply {
-            setSize(100,20)
+            setSize(150, 20)
             font = tabFont
         }, BorderLayout.CENTER)
         add(JButton("x").apply {
@@ -74,6 +75,8 @@ val displayFrame = JFrame().apply {
     Listener.registerCreateItem()
     Listener.registerOpenItem()
     Listener.registerSaveItem()
+    Listener.registerSaveAsItem()
+    Listener.registerCloseCurrentPageItem()
 
     setSize(1000, 800)
     setLocationRelativeTo(null)
@@ -91,7 +94,7 @@ class Main {
         @JvmStatic
         fun main(args: Array<String>) {
             SwingUtilities.invokeLater {
-                FlatDarkLaf.setup()
+                FlatMacDarkLaf.setup()
                 displayFrame
             }
         }
