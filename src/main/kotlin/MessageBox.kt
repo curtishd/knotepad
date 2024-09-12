@@ -47,3 +47,8 @@ fun exitOrNot() {
         exitProcess(0)
     }
 }
+
+// 鼠标右键
+fun mouseRightClick() {
+
+}

@@ -2,6 +2,7 @@ package me.cdh
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf
 import java.awt.BorderLayout
+import java.awt.Container
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.JButton
@@ -10,7 +11,6 @@ import javax.swing.JLabel
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
-import javax.swing.JPanel
 import javax.swing.JTabbedPane
 import javax.swing.SwingUtilities
 
@@ -20,7 +20,7 @@ val bufferList = mutableListOf(EditorArea()) // 维护tabpane内部editorarea
 val displayTextPane = EditorScrollPane(bufferList[0])
 val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
-    setTabComponentAt(0, JPanel().apply {
+    setTabComponentAt(0, Container().apply {
         layout = BorderLayout()
         add(JLabel(defaultTitle).apply {
             setSize(150, 20)

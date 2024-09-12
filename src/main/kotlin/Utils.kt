@@ -8,6 +8,3 @@ val contentFont = Font("Cascadia Mono", Font.PLAIN, 16)
 
 const val defaultTitle = "New File"
 val tabFont = Font("Cascadia Mono", Font.ITALIC, 14)
-
-val searchFont= Font("Cascadia Mono",Font.PLAIN,14)
-val replaceFont= Font("Cascadia Mono",Font.PLAIN,14)

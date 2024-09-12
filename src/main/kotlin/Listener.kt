@@ -1,12 +1,12 @@
 package me.cdh
 
 import java.awt.BorderLayout
+import java.awt.Container
 import java.io.File
 import javax.swing.JButton
 import javax.swing.JFileChooser
 import javax.swing.JLabel
 import javax.swing.JOptionPane
-import javax.swing.JPanel
 
 object Listener {
 
@@ -15,11 +15,11 @@ object Listener {
     // 注册创建文件按钮事件
     fun registerCreateItem() {
         createFile.addActionListener {
-            val panel = registerDeleteBtnInTab(defaultTitle)
+            val container = registerDeleteBtnInTab(defaultTitle)
             tabPane.addTab(null, EditorScrollPane(EditorArea()))
             val index = tabPane.selectedIndex
             if (index != -1) {
-                tabPane.setTabComponentAt(bufferList.size, panel)
+                tabPane.setTabComponentAt(bufferList.size, container)
                 bufferList.add(EditorArea())
             }
         }
@@ -46,8 +46,8 @@ object Listener {
                         }
                         println(userSelectedFile!!.name) //debug
                         val lastIndex = bufferList.size - 1
-                        val panel = registerDeleteBtnInTab(userSelectedFile!!.name)
-                        tabPane.setTabComponentAt(lastIndex, panel)
+                        val container = registerDeleteBtnInTab(userSelectedFile!!.name)
+                        tabPane.setTabComponentAt(lastIndex, container)
                         // set the current buffer title as same as the file which user selected
                         tabPane.selectedIndex = lastIndex
                         tabPane.setTitleAt(lastIndex, userSelectedFile?.name)
@@ -134,12 +134,12 @@ object Listener {
     }
 
     // 注册删除按钮事件
-    private fun registerDeleteBtnInTab(label: String): JPanel {
+    private fun registerDeleteBtnInTab(label: String): Container {
         val btn = JButton("x").apply {
             isFocusPainted = false
             isContentAreaFilled = false
         }
-        val panel = JPanel().apply {
+        val container = Container().apply {
             setSize(100, 20)
             layout = BorderLayout()
             add(JLabel(label).apply {
@@ -149,7 +149,7 @@ object Listener {
         }
         with(btn) {
             addActionListener {
-                val index = tabPane.indexOfTabComponent(panel)
+                val index = tabPane.indexOfTabComponent(container)
                 println(index)
                 if (index >= 0) {
                     val tabIndex = tabPane.indexOfTab(tabPane.getTitleAt(index))
@@ -158,6 +158,6 @@ object Listener {
                 }
             }
         }
-        return panel
+        return container
     }
 }

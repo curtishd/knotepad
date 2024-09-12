@@ -20,3 +20,15 @@ tasks.test {
 kotlin {
     jvmToolchain(21)
 }
+
+tasks.jar {
+    archiveFileName="executable.jar"
+    manifest {
+        attributes(mapOf("Main-Class" to "me.cdh.Main"))
+    }
+    from(configurations.runtimeClasspath.get().map {
+        if (it.isDirectory) it else zipTree(it)
+    })
+    val sourcesMain = sourceSets.main.get()
+    from(sourcesMain.output)
+}
