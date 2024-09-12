@@ -4,13 +4,12 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.JButton
 import javax.swing.JFrame
-import javax.swing.JMenu
 import javax.swing.JMenuItem
 import javax.swing.JPanel
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
+import javax.swing.MenuElement
 
 class EditorArea(textArea: String) : JTextArea(textArea) {
     constructor() : this(textArea = "")
@@ -27,16 +26,11 @@ class EditorArea(textArea: String) : JTextArea(textArea) {
                 val mousePositionY = e?.y
                 // 检查鼠标是否右键文本区域
                 if (e?.button == MouseEvent.BUTTON3) {
-                    JFrame().apply {
+                    val rightClickFrame = JFrame().apply {
                         isUndecorated = true
-                        contentPane.add(JPanel().apply {
-                            add(JButton("Cut"))
-                            add(JButton("Copy"))
-                            add(JButton("Paste"))
-                            add(JButton("Undo"))
-                            add(JButton("Redo"))
-                        })
+                        contentPane.add(RightClickPanel)
                         defaultCloseOperation = JFrame.DO_NOTHING_ON_CLOSE
+                        // bug
                         setBounds(mousePositionX!! + 280, mousePositionY!! + 100, 100, 300)
                         isAlwaysOnTop = true
                         isVisible = true
@@ -58,5 +52,16 @@ class EditorScrollPane(textArea: EditorArea) : JScrollPane(textArea) {
 
     init {
         horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_NEVER
+    }
+}
+
+// bug
+object RightClickPanel : JPanel(), MenuElement by JMenuItem() {
+    init {
+        add(JMenuItem("Cut"))
+        add(JMenuItem("Copy"))
+        add(JMenuItem("Paste"))
+        add(JMenuItem("Undo"))
+        add(JMenuItem("Redo"))
     }
 }
