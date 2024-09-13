@@ -21,6 +21,8 @@ object Listener {
             if (index != -1) {
                 tabPane.setTabComponentAt(bufferList.size, container)
                 bufferList.add(EditorArea())
+                // 设置下一个tab为选中
+                tabPane.selectedIndex = index + 1
             }
         }
     }
@@ -59,6 +61,8 @@ object Listener {
                         it?.readLines()?.forEach {
                             currentTextArea.append("$it\n")
                         }
+                        // 设置打开的tab为选中状态
+                        tabPane.selectedIndex = curIndex
                     }
                 } else println("open cancel")
             }
@@ -126,10 +130,10 @@ object Listener {
     fun registerCloseCurrentPageItem() {
         closePage.addActionListener {
             val selectedIndex = tabPane.selectedIndex
-            if (selectedIndex != -1) {
+            if (selectedIndex != -1 && bufferList.size > 1) {
                 tabPane.removeTabAt(selectedIndex)
                 bufferList.removeAt(selectedIndex)
-            } else error("No tab is selected")
+            } else println("do not close buffer")
         }
     }
 
@@ -150,12 +154,11 @@ object Listener {
         with(btn) {
             addActionListener {
                 val index = tabPane.indexOfTabComponent(container)
-                println(index)
-                if (index >= 0) {
+                if (index >= 0 && bufferList.size > 1) {
                     val tabIndex = tabPane.indexOfTab(tabPane.getTitleAt(index))
                     tabPane.removeTabAt(tabIndex)
                     bufferList.removeAt(tabIndex)
-                }
+                } else println("do not close tab")
             }
         }
         return container
