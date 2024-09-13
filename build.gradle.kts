@@ -22,7 +22,7 @@ kotlin {
 }
 
 tasks.jar {
-    archiveFileName="executable.jar"
+    archiveFileName="notepad.jar"
     manifest {
         attributes(mapOf("Main-Class" to "me.cdh.Main"))
     }

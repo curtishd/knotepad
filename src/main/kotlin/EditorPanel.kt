@@ -4,7 +4,6 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
-import javax.swing.JScrollPane
 import javax.swing.JTextArea
 
 class EditorArea() : JTextArea() {
@@ -31,14 +30,19 @@ class EditorArea() : JTextArea() {
     }
 
     init {
-        lineWrap = true
+//        lineWrap = true
         tabSize = 4
-        wrapStyleWord = true
+//        wrapStyleWord = true
         font = contentFont
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
                 if (e!!.button == MouseEvent.BUTTON3) {
                     showPopupMenu(e)
+                }
+                if (e.button == MouseEvent.BUTTON1) {
+                    val line = lineCount.toString()
+                    val column = columns.toString()
+                    lineAndColumn.text = "$line:$column"
                 }
             }
 
@@ -51,12 +55,6 @@ class EditorArea() : JTextArea() {
             }
         })
     }
-    fun showPopupMenu(e: MouseEvent) = if (e.isPopupTrigger) rightClickMenu.show(e.component,e.x,e.y) else null
-}
 
-class EditorScrollPane(textArea: EditorArea) : JScrollPane(textArea) {
-
-    init {
-        horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_NEVER
-    }
+    fun showPopupMenu(e: MouseEvent) = if (e.isPopupTrigger) rightClickMenu.show(e.component, e.x, e.y) else null
 }
