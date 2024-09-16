@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "me.cdh"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ kotlin {
 }
 
 tasks.jar {
-    archiveFileName="notepad.jar"
+    archiveFileName = "notepad.jar"
     manifest {
         attributes(mapOf("Main-Class" to "me.cdh.Main"))
     }

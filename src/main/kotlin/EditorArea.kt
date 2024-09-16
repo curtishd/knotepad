@@ -7,21 +7,9 @@ import javax.swing.JPopupMenu
 import javax.swing.JTextArea
 
 class EditorArea() : JTextArea() {
-    val cut = JMenuItem("Cut").apply {
-        addActionListener {
-            cut()
-        }
-    }
-    val copy = JMenuItem("Copy").apply {
-        addActionListener {
-            copy()
-        }
-    }
-    val paste = JMenuItem("Paste").apply {
-        addActionListener {
-            paste()
-        }
-    }
+    val cut = JMenuItem("Cut").apply { addActionListener { cut() } }
+    val copy = JMenuItem("Copy").apply { addActionListener { copy() } }
+    val paste = JMenuItem("Paste").apply { addActionListener { paste() } }
     val rightClickMenu = JPopupMenu().apply {
         add(cut)
         addSeparator()
@@ -30,19 +18,20 @@ class EditorArea() : JTextArea() {
     }
 
     init {
+        // 自动换行
 //        lineWrap = true
-        tabSize = 4
 //        wrapStyleWord = true
+        tabSize = 4
         font = contentFont
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
+                // 鼠标右键行为
                 if (e!!.button == MouseEvent.BUTTON3) {
                     showPopupMenu(e)
                 }
+                // 鼠标左键行为
                 if (e.button == MouseEvent.BUTTON1) {
-                    val line = lineCount.toString()
-                    val column = columns.toString()
-                    lineAndColumn.text = "$line:$column"
+                    lineAndColumn.text = "Line: $lineCount"
                 }
             }
 

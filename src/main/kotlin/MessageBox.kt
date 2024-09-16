@@ -2,13 +2,12 @@ package me.cdh
 
 import java.awt.BorderLayout
 import java.awt.GraphicsEnvironment
-import java.util.Timer
-import java.util.TimerTask
 import javax.swing.JFrame
 import javax.swing.JLabel
 import javax.swing.JOptionPane
 import javax.swing.JPanel
 import javax.swing.border.EtchedBorder
+import kotlin.concurrent.timer
 import kotlin.system.exitProcess
 
 // 弹出保存标签当保存成功的时候
@@ -32,18 +31,22 @@ fun labelPopup(message: String) {
         isVisible = true
         setLocation(x, y)
     }
-    val task = object : TimerTask() {
-        override fun run() {
-            frame.dispose()
-        }
-    }
-    Timer().schedule(task, 2000L)
+    timer(initialDelay = 2000L, period = 1L, action = { frame.dispose() })
 }
 
 // 确认退出
 fun exitOrNot() {
-    val result = JOptionPane.showConfirmDialog(null, "Are you sure to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION)
-    if (result == JOptionPane.YES_OPTION) {
-        exitProcess(0)
+    for (i in 0..<tabPane.tabCount) {
+        if (bufferList[i].text.isNotBlank()) {
+            val result = JOptionPane.showConfirmDialog(
+                null,
+                "Are you sure to exit?",
+                "Confirm Exit",
+                JOptionPane.YES_NO_OPTION
+            )
+            if (result == JOptionPane.YES_OPTION) {
+                exitProcess(0)
+            }
+        } else exitProcess(0)
     }
 }
