@@ -37,7 +37,7 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
             setSize(150, 20)
             font = tabFont
         }, BorderLayout.CENTER)
-        add(JButton(ImageIcon(Main.javaClass.getResource("/white_close_button.png"))).apply {
+        add(JButton(ImageIcon(Main.javaClass.classLoader.getResource("white_close_button.png"))).apply {
             isFocusPainted = false
             isContentAreaFilled = false
         }, BorderLayout.EAST)
@@ -46,21 +46,21 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
 
 // settings 子菜单
 //----------------------theme-------------------------
-private val macDarkTheme = JCheckBoxMenuItem("Mac Dark").apply {
+private val macDarkTheme = JCheckBoxMenuItem("Dark").apply {
     addActionListener {
         isSelected = true
         UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf")
         FlatMacDarkLaf.updateUI()
     }
 }
-private val macLightTheme = JCheckBoxMenuItem("Mac Light").apply {
+private val macLightTheme = JCheckBoxMenuItem("Light White").apply {
     addActionListener {
         isSelected = true
         UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacLightLaf")
         FlatMacLightLaf.updateUI()
     }
 }
-private val darkTheme = JCheckBoxMenuItem("Dark").apply {
+private val darkTheme = JCheckBoxMenuItem("Light Gray").apply {
     addActionListener {
         isSelected = true
         UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf")
@@ -115,7 +115,7 @@ val exit = JMenuItem("Exit").apply {
 
 // 菜单栏按钮
 val menu = JMenu().apply {
-    icon = ImageIcon(Main.javaClass.getResource("/white_menu.png"))
+    icon = ImageIcon(Main.javaClass.classLoader.getResource("white_menu.png"))
     add(createFile)
     add(open)
     addSeparator()
@@ -133,7 +133,7 @@ val displayMenuBar = JMenuBar().apply {
     add(menu)
 }
 
-val lineAndColumn = JLabel("Line: 1")
+val lineDisplay = JLabel("Line: 1")
 
 val indentBtn = JButton("4 spaces").apply {
     isContentAreaFilled = false
@@ -171,7 +171,7 @@ val statusBar = JPanel().apply {
     dimension.height = 18
     preferredSize = dimension
 
-    add(lineAndColumn, BorderLayout.WEST)
+    add(lineDisplay, BorderLayout.WEST)
     add(indentBtn, BorderLayout.EAST)
 }
 

@@ -31,7 +31,7 @@ class EditorArea() : JTextArea() {
                 }
                 // 鼠标左键行为
                 if (e.button == MouseEvent.BUTTON1) {
-                    lineAndColumn.text = "Line: $lineCount"
+                    lineDisplay.text = "Line: $lineCount"
                 }
             }
 

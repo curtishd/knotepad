@@ -105,7 +105,7 @@ internal fun registerCloseCurrentPageItem() {
 
 // 注册删除按钮事件
 private fun registerDeleteBtnInTab(label: String): Container {
-    val btn = JButton(ImageIcon(Main.javaClass.getResource("/white_close_button.png"))).apply {
+    val btn = JButton(ImageIcon(Main.javaClass.classLoader.getResource("white_close_button.png"))).apply {
         isFocusPainted = false
         isContentAreaFilled = false
     }
@@ -136,7 +136,7 @@ private fun saveFile() {
         dialogTitle = "Save File"
         if (result == JFileChooser.APPROVE_OPTION) {
             val fileToSave = selectedFile
-            val fileName= selectedFile.name
+            val fileName = selectedFile.name
             val bufferIndex = tabPane.selectedIndex
             if (bufferIndex != -1 && fileToSave.exists()) {
                 val content = bufferList[bufferIndex].text
