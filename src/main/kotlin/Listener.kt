@@ -1,14 +1,20 @@
 package me.cdh
 
+import com.formdev.flatlaf.FlatDarculaLaf
+import com.formdev.flatlaf.FlatDarkLaf
+import com.formdev.flatlaf.FlatLightLaf
+import com.formdev.flatlaf.themes.FlatMacDarkLaf
 import java.awt.BorderLayout
 import java.awt.Container
 import java.io.File
 import javax.swing.ImageIcon
 import javax.swing.JButton
+import javax.swing.JCheckBoxMenuItem
 import javax.swing.JFileChooser
 import javax.swing.JLabel
 import javax.swing.JOptionPane
 import javax.swing.JScrollPane
+import javax.swing.UIManager
 
 var userSelectedFile: File? = null
 
@@ -162,6 +168,22 @@ private fun saveFile() {
                 file.bufferedWriter().use {
                     it.write(content)
                 }
+            }
+        }
+    }
+}
+
+internal fun repaintTheme(checkBox: JCheckBoxMenuItem, lookAndFeel: String) {
+    checkBox.addActionListener {
+        checkBox.isSelected = true
+        UIManager.setLookAndFeel(lookAndFeel)
+        lookAndFeel.split(".").last().let {
+            when (it) {
+                "FlatMacLightLaf" -> FlatMacDarkLaf.updateUI()
+                "FlatMacDarkLaf" -> FlatMacDarkLaf.updateUI()
+                "FlatLightLaf" -> FlatLightLaf.updateUI()
+                "FlatDarculaLaf" -> FlatDarculaLaf.updateUI()
+                "FlatDarkLaf" -> FlatDarkLaf.updateUI()
             }
         }
     }

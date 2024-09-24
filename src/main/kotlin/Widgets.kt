@@ -1,10 +1,5 @@
 package me.cdh
 
-import com.formdev.flatlaf.FlatDarculaLaf
-import com.formdev.flatlaf.FlatDarkLaf
-import com.formdev.flatlaf.FlatLightLaf
-import com.formdev.flatlaf.themes.FlatMacDarkLaf
-import com.formdev.flatlaf.themes.FlatMacLightLaf
 import java.awt.BorderLayout
 import java.awt.Container
 import java.awt.Dimension
@@ -23,7 +18,6 @@ import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
-import javax.swing.UIManager
 
 val bufferList = mutableListOf(EditorArea())
 
@@ -47,40 +41,19 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
 // settings 子菜单
 //----------------------theme-------------------------
 private val macDarkTheme = JCheckBoxMenuItem("Dark").apply {
-    addActionListener {
-        isSelected = true
-        UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf")
-        FlatMacDarkLaf.updateUI()
-    }
+    repaintTheme(this, MAC_DARK)
 }
 private val macLightTheme = JCheckBoxMenuItem("Light White").apply {
-    addActionListener {
-        isSelected = true
-        UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacLightLaf")
-        FlatMacLightLaf.updateUI()
-    }
+    repaintTheme(this, MAC_LIGHT)
 }
 private val darkTheme = JCheckBoxMenuItem("Light Gray").apply {
-    addActionListener {
-        isSelected = true
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf")
-        FlatDarkLaf.updateUI()
-    }
+    repaintTheme(this, DARK)
 }
 private val lightTheme = JCheckBoxMenuItem("Light").apply {
-    addActionListener {
-        isSelected = true
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf")
-        FlatLightLaf.updateUI()
-    }
-
+    repaintTheme(this, LIGHT)
 }
 private val darculaTheme = JCheckBoxMenuItem("Darcula").apply {
-    addActionListener {
-        isSelected = true
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarculaLaf")
-        FlatDarculaLaf.updateUI()
-    }
+    repaintTheme(this, DARCULA)
 }
 private val group = ButtonGroup().apply {
     add(macDarkTheme)
@@ -96,6 +69,7 @@ val changeTheme = JMenu("Change Theme").apply {
     add(macDarkTheme)
     add(macLightTheme)
 }
+
 //----------------------------------------------
 // 菜单栏选项
 val createFile = JMenuItem("Create File")
