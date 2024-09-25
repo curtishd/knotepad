@@ -21,7 +21,7 @@ import javax.swing.JTabbedPane
 
 val bufferList = mutableListOf(EditorArea())
 
-//默认展示空白文件
+// show empty file default
 val displayTextPane = JScrollPane(bufferList[0])
 val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     addTab(defaultTitle, displayTextPane)
@@ -38,7 +38,7 @@ val tabPane = JTabbedPane(JTabbedPane.TOP).apply {
     })
 }
 
-// settings 子菜单
+// settings
 //----------------------theme-------------------------
 private val macDarkTheme = JCheckBoxMenuItem("Dark").apply {
     repaintTheme(this, MAC_DARK)
@@ -46,32 +46,23 @@ private val macDarkTheme = JCheckBoxMenuItem("Dark").apply {
 private val macLightTheme = JCheckBoxMenuItem("Light White").apply {
     repaintTheme(this, MAC_LIGHT)
 }
-private val darkTheme = JCheckBoxMenuItem("Light Gray").apply {
-    repaintTheme(this, DARK)
-}
-private val lightTheme = JCheckBoxMenuItem("Light").apply {
-    repaintTheme(this, LIGHT)
-}
+
 private val darculaTheme = JCheckBoxMenuItem("Darcula").apply {
     repaintTheme(this, DARCULA)
 }
+
+@Suppress("Unused")
 private val group = ButtonGroup().apply {
     add(macDarkTheme)
     add(macLightTheme)
-    add(lightTheme)
-    add(darkTheme)
     add(darculaTheme)
 }
 val changeTheme = JMenu("Change Theme").apply {
-    add(darkTheme)
-    add(lightTheme)
     add(darculaTheme)
     add(macDarkTheme)
     add(macLightTheme)
 }
 
-//----------------------------------------------
-// 菜单栏选项
 val createFile = JMenuItem("Create File")
 val open = JMenuItem("Open")
 val save = JMenuItem("Save")
@@ -87,7 +78,6 @@ val exit = JMenuItem("Exit").apply {
     }
 }
 
-// 菜单栏按钮
 val menu = JMenu().apply {
     icon = ImageIcon(Main.javaClass.classLoader.getResource("white_menu.png"))
     add(createFile)
@@ -138,7 +128,7 @@ val indentBtn = JButton("4 spaces").apply {
     }
 }
 
-// 状态栏
+// status bar
 val statusBar = JPanel().apply {
     layout = BorderLayout()
     val dimension = Dimension(preferredSize)
@@ -149,7 +139,7 @@ val statusBar = JPanel().apply {
     add(indentBtn, BorderLayout.EAST)
 }
 
-// 基础框架
+// framework
 val displayFrame = JFrame().apply {
     jMenuBar = displayMenuBar
     layout = BorderLayout()

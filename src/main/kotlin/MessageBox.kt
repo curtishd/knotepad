@@ -10,7 +10,7 @@ import javax.swing.border.EtchedBorder
 import kotlin.concurrent.timer
 import kotlin.system.exitProcess
 
-// 弹出保存标签当保存成功的时候
+// pop up label after save success
 fun labelPopup(message: String) {
     val messageLabel = JLabel(message)
     messageLabel.font = messageBoxFont
@@ -34,7 +34,7 @@ fun labelPopup(message: String) {
     timer(initialDelay = 2000L, period = 1L, action = { frame.dispose() })
 }
 
-// 确认退出
+// confirm exit
 fun exitOrNot() {
     for (i in 0..<tabPane.tabCount) {
         if (bufferList[i].text.isNotBlank()) {

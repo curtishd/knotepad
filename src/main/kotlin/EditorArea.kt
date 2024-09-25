@@ -18,18 +18,18 @@ class EditorArea() : JTextArea() {
     }
 
     init {
-        // 自动换行
+        // auto new line
 //        lineWrap = true
 //        wrapStyleWord = true
         tabSize = 4
         font = contentFont
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
-                // 鼠标右键行为
+                // right click
                 if (e!!.button == MouseEvent.BUTTON3) {
                     showPopupMenu(e)
                 }
-                // 鼠标左键行为
+                // left click
                 if (e.button == MouseEvent.BUTTON1) {
                     lineDisplay.text = "Line: $lineCount"
                 }

@@ -1,1 +1,0 @@
-java -cp .\build\resources\main -p ".\build\classes\java\main;.\build\libs\kotlin-stdlib-2.0.20.jar;.\build\libs\flatlaf-3.5.1.jar" -m me.cdh/me.cdh.Main

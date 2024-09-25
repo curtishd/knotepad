@@ -1,9 +1,8 @@
 package me.cdh
 
 import com.formdev.flatlaf.FlatDarculaLaf
-import com.formdev.flatlaf.FlatDarkLaf
-import com.formdev.flatlaf.FlatLightLaf
 import com.formdev.flatlaf.themes.FlatMacDarkLaf
+import com.formdev.flatlaf.themes.FlatMacLightLaf
 import java.awt.BorderLayout
 import java.awt.Container
 import java.io.File
@@ -18,7 +17,6 @@ import javax.swing.UIManager
 
 var userSelectedFile: File? = null
 
-// 注册创建文件按钮事件
 internal fun registerCreateItem() {
     createFile.addActionListener {
         val container = registerDeleteBtnInTab(defaultTitle)
@@ -27,13 +25,13 @@ internal fun registerCreateItem() {
         if (index != -1) {
             tabPane.setTabComponentAt(bufferList.size, container)
             bufferList.add(EditorArea())
-            // 设置下一个tab为选中
+            // set next tabbed selected
             tabPane.selectedIndex = index + 1
         }
     }
 }
 
-// 注册打开文件按钮事件
+// register open file event
 internal fun registerOpenItem() =
     open.addActionListener {
         JFileChooser().apply {
@@ -67,14 +65,13 @@ internal fun registerOpenItem() =
                     it?.readLines()?.forEach {
                         currentTextArea.append("$it\n")
                     }
-                    // 设置打开的tab为选中状态
                     tabPane.selectedIndex = curIndex
                 }
             } else println("open cancel")
         }
     }
 
-// 注册保存文件按钮事件
+// register save file event
 internal fun registerSaveItem() {
     save.addActionListener {
         if (userSelectedFile == null) {
@@ -98,7 +95,7 @@ internal fun registerFindAndReplaceItem() {
     TODO()
 }
 
-// 注册关闭当前页按钮事件
+// register close page event
 internal fun registerCloseCurrentPageItem() {
     closePage.addActionListener {
         val selectedIndex = tabPane.selectedIndex
@@ -109,7 +106,7 @@ internal fun registerCloseCurrentPageItem() {
     }
 }
 
-// 注册删除按钮事件
+// register remove button event
 private fun registerDeleteBtnInTab(label: String): Container {
     val btn = JButton(ImageIcon(Main.javaClass.classLoader.getResource("white_close_button.png"))).apply {
         isFocusPainted = false
@@ -179,11 +176,9 @@ internal fun repaintTheme(checkBox: JCheckBoxMenuItem, lookAndFeel: String) {
         UIManager.setLookAndFeel(lookAndFeel)
         lookAndFeel.split(".").last().let {
             when (it) {
-                "FlatMacLightLaf" -> FlatMacDarkLaf.updateUI()
+                "FlatMacLightLaf" -> FlatMacLightLaf.updateUI()
                 "FlatMacDarkLaf" -> FlatMacDarkLaf.updateUI()
-                "FlatLightLaf" -> FlatLightLaf.updateUI()
                 "FlatDarculaLaf" -> FlatDarculaLaf.updateUI()
-                "FlatDarkLaf" -> FlatDarkLaf.updateUI()
             }
         }
     }
