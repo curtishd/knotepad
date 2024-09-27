@@ -1,10 +1,16 @@
 package me.cdh
 
 import java.awt.BorderLayout
+import java.awt.Color
 import java.awt.Container
 import java.awt.Dimension
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
+import java.awt.event.FocusAdapter
+import java.awt.event.FocusEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import javax.swing.Box
 import javax.swing.ButtonGroup
 import javax.swing.ImageIcon
 import javax.swing.JButton
@@ -18,6 +24,7 @@ import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
+import javax.swing.JTextField
 
 val bufferList = mutableListOf(EditorArea())
 
@@ -63,22 +70,22 @@ val changeTheme = JMenu("Change Theme").apply {
     add(macLightTheme)
 }
 
-val createFile = JMenuItem("Create File")
-val open = JMenuItem("Open")
-val save = JMenuItem("Save")
-val saveAs = JMenuItem("Save As")
-val findAndReplace = JMenuItem("Find And Replace")
-val closePage = JMenuItem("Close Current Page")
-val settings = JMenu("Settings").apply {
+val createFile: JMenuItem = JMenuItem("Create File")
+val open: JMenuItem = JMenuItem("Open")
+val save: JMenuItem = JMenuItem("Save")
+val saveAs: JMenuItem = JMenuItem("Save As")
+val findAndReplace: JMenuItem = JMenuItem("Find And Replace")
+val closePage: JMenuItem = JMenuItem("Close Current Page")
+val settings: JMenu = JMenu("Settings").apply {
     add(changeTheme)
 }
-val exit = JMenuItem("Exit").apply {
+val exit: JMenuItem = JMenuItem("Exit").apply {
     addActionListener {
         exitOrNot()
     }
 }
 
-val menu = JMenu().apply {
+val menu: JMenu = JMenu().apply {
     icon = ImageIcon(Main.javaClass.classLoader.getResource("white_menu.png"))
     add(createFile)
     add(open)
@@ -93,13 +100,13 @@ val menu = JMenu().apply {
     add(exit)
 }
 
-val displayMenuBar = JMenuBar().apply {
+val displayMenuBar: JMenuBar = JMenuBar().apply {
     add(menu)
 }
 
-val lineDisplay = JLabel("Line: 1")
+val lineDisplay: JLabel = JLabel("Line: 1")
 
-val indentBtn = JButton("4 spaces").apply {
+val indentBtn: JButton = JButton("4 spaces").apply {
     isContentAreaFilled = false
     isBorderPainted = false
     val two = JMenuItem("2 spaces")
@@ -129,7 +136,7 @@ val indentBtn = JButton("4 spaces").apply {
 }
 
 // status bar
-val statusBar = JPanel().apply {
+val statusBar: JPanel = JPanel().apply {
     layout = BorderLayout()
     val dimension = Dimension(preferredSize)
     dimension.height = 18
@@ -140,7 +147,7 @@ val statusBar = JPanel().apply {
 }
 
 // framework
-val displayFrame = JFrame().apply {
+val displayFrame: JFrame = JFrame().apply {
     jMenuBar = displayMenuBar
     layout = BorderLayout()
     add(tabPane, BorderLayout.CENTER)
@@ -151,6 +158,7 @@ val displayFrame = JFrame().apply {
     registerOpenItem()
     registerSaveItem()
     registerSaveAsItem()
+    registerFindAndReplaceItem()
     registerCloseCurrentPageItem()
 
     setSize(1000, 800)
@@ -162,4 +170,108 @@ val displayFrame = JFrame().apply {
             exitOrNot()
         }
     })
+    addComponentListener(object : ComponentAdapter() {
+        override fun componentMoved(e: ComponentEvent?) {
+            val x = locationOnScreen.x + 700//
+            val y = locationOnScreen.y + 33//
+            dialog.setLocation(x, y)
+            dialog.setSize(300, 100)
+            dialog.isAlwaysOnTop =true
+        }
+    })
+}
+
+// Search and replace widgets
+
+internal val dialogBtn = JButton("X").apply {
+    addActionListener {
+        dialog.dispose()
+    }
+}
+
+internal val search: JTextField = JTextField().apply {
+    val newSize = Dimension(displayFrame.width - 800, 30)
+    preferredSize = newSize
+    text = "Search"
+    foreground = Color.GRAY
+    addComponentListener(object : ComponentAdapter() {
+        override fun componentResized(e: ComponentEvent?) {
+            displayFrame.repaint()
+        }
+    })
+    addFocusListener(object : FocusAdapter() {
+        override fun focusLost(e: FocusEvent?) {
+            text = "Search"
+            foreground = Color.GRAY
+        }
+
+        override fun focusGained(e: FocusEvent?) {
+            text = ""
+            foreground = Color.WHITE
+        }
+    })
+}
+
+internal val replace: JTextField = JTextField().apply {
+    isVisible = false
+    val newSize = Dimension(displayFrame.width -800, 30)
+    preferredSize = newSize
+    text = "Replace"
+    foreground = Color.GRAY
+    addComponentListener(object : ComponentAdapter() {
+        override fun componentResized(e: ComponentEvent?) {
+            displayFrame.repaint()
+        }
+    })
+    addFocusListener(object : FocusAdapter() {
+        override fun focusLost(e: FocusEvent?) {
+            text = "Replace"
+            foreground = Color.GRAY
+        }
+
+        override fun focusGained(e: FocusEvent?) {
+            text = ""
+            foreground = Color.WHITE
+        }
+    })
+}
+private val textFieldBox = Box.createVerticalBox()
+private val jp = JPanel().apply {
+    add(replace)
+}
+internal val displayReplace = JButton(">").apply {
+    isBorderPainted = false
+    var toggle = false
+    addActionListener {
+        if (toggle) {
+            text = ">"
+            replace.isVisible = false
+            toggle = !toggle
+        } else {
+            text = "v"
+            replace.isVisible = true
+            toggle = !toggle
+        }
+    }
+}
+internal val dialog: JFrame = JFrame().apply {
+    val pt = JPanel()
+    pt.add(search)
+    textFieldBox.add(pt)
+    textFieldBox.add(jp)
+    val hBox = Box.createHorizontalBox()
+    val leftP = JPanel()
+    leftP.add(displayReplace)
+    hBox.add(leftP)
+    hBox.add(Box.createHorizontalStrut(5))
+    hBox.add(textFieldBox)
+    val p = JPanel()
+    p.add(dialogBtn)
+    hBox.add(Box.createHorizontalStrut(5))
+    hBox.add(p)
+
+    add(hBox)
+    isResizable = false
+    isUndecorated = true
+    defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
 }

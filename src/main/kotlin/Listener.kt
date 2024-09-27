@@ -5,6 +5,8 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf
 import com.formdev.flatlaf.themes.FlatMacLightLaf
 import java.awt.BorderLayout
 import java.awt.Container
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import java.io.File
 import javax.swing.ImageIcon
 import javax.swing.JButton
@@ -92,7 +94,11 @@ internal fun registerSaveItem() {
 internal fun registerSaveAsItem() = saveAs.addActionListener { saveFile() }
 
 internal fun registerFindAndReplaceItem() {
-    TODO()
+    findAndReplace.addActionListener(object : ActionListener {
+        override fun actionPerformed(e: ActionEvent?) {
+            dialog.isVisible = true
+        }
+    })
 }
 
 // register close page event
