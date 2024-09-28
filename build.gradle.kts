@@ -77,3 +77,12 @@ tasks.jar {
     val sourcesMain = sourceSets.main.get()
     from(sourcesMain.output)
 }
+tasks {
+    create<Copy>("copyDependencies") {
+        from(configurations["runtimeClasspath"].files)
+        into(layout.buildDirectory.dir("libs"))
+        include { details ->
+            details.file.name.endsWith(".jar")
+        }
+    }
+}

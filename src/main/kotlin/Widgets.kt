@@ -25,6 +25,7 @@ import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
 import javax.swing.JTextField
+import javax.swing.border.LineBorder
 
 val bufferList = mutableListOf(EditorArea())
 
@@ -172,11 +173,11 @@ val displayFrame: JFrame = JFrame().apply {
     })
     addComponentListener(object : ComponentAdapter() {
         override fun componentMoved(e: ComponentEvent?) {
-            val x = locationOnScreen.x + 700//
-            val y = locationOnScreen.y + 33//
-            dialog.setLocation(x, y)
+            val x = displayFrame.locationOnScreen.x
+            val y = displayFrame.locationOnScreen.y
+            val disX = displayFrame.width
+            dialog.setLocation(x + disX - 320, y + 80)
             dialog.setSize(300, 100)
-            dialog.isAlwaysOnTop =true
         }
     })
 }
@@ -214,7 +215,7 @@ internal val search: JTextField = JTextField().apply {
 
 internal val replace: JTextField = JTextField().apply {
     isVisible = false
-    val newSize = Dimension(displayFrame.width -800, 30)
+    val newSize = Dimension(displayFrame.width - 800, 30)
     preferredSize = newSize
     text = "Replace"
     foreground = Color.GRAY
@@ -269,9 +270,13 @@ internal val dialog: JFrame = JFrame().apply {
     p.add(dialogBtn)
     hBox.add(Box.createHorizontalStrut(5))
     hBox.add(p)
+    val container = JPanel()
+    container.border = LineBorder(Color.WHITE, 1)
+    container.add(hBox)
+    add(container)
 
-    add(hBox)
     isResizable = false
     isUndecorated = true
+    isAlwaysOnTop = true
     defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
 }
